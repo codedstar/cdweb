@@ -1,0 +1,8 @@
+com/mycompany/cdweb/resources/JakartaEE91Resource.class
+AdminGenre.class
+Genre.class
+env.class
+Cdmenuservlet.class
+User.class
+dbConn.class
+com/mycompany/cdweb/JakartaRestConfiguration.class
