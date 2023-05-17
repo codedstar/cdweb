@@ -6,7 +6,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>Cdmenuservlet</servlet-name>
-        <url-pattern>/Cdmenuservlet</url-pattern>
+        <url-pattern>/</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

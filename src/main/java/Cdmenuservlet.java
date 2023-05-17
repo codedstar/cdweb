@@ -29,64 +29,8 @@ public class Cdmenuservlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        Genre genre = new Genre();
-        AdminGenre adminGenre = new AdminGenre();
-        ArrayList<Genre> genreList = adminGenre.readGenreAll();
-        
-//        displayGenres(genreList);
 
-//        ArrayList list;
-        
-        
-        
-        
-        request.setAttribute("genreList", genreList);
-//        request.setAttribute("Genre", genre);
-
-        String name = request.getParameter("name");
-        
-        if(name != null){
-        genre.setName(name);
-
-        try {
-            adminGenre.insertGenre(genre.getName());
-            System.out.println(name + " inserted.");
-        } catch (Error e) {
-            System.out.println("Error" + e.getMessage());
-        }
-        
-        request.setAttribute("msg", name + " inserted.");
-        }
-
-        RequestDispatcher rd = request.getRequestDispatcher("cdmenu.jsp");
-        rd.forward(request, response);
-        
     }
-    
-    public static String displayGenres(ArrayList<Genre> genreList) {
-        String list = "";
-        if (!genreList.isEmpty()) {
-//            System.out.println("The list has " + genreList.size() + " elements.");
-            list = "The list has " + genreList.size() + " elements.\n";
-            // for loop
-//            System.out.println("Genre ID " + " | " + "Genre Name ");
-            for (Genre genre : genreList) {
-//                System.out.println(genre.getID() + "         | " + genre.getName());
-                  list  += genre.getID() + "         | " + genre.getName() +'\n';
-
-            }
-//            System.out.println("\n");
-              list  += '\n';
-
-        } else {
-//         the list is empty
-//            System.out.println("Genre List is Empty at the moment.\n");
-              list  += "Genre List is Empty at the moment.";
-        }
-        return list;
-    }
-
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -101,6 +45,14 @@ public class Cdmenuservlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
+
+        AdminGenre adminGenre = new AdminGenre();
+        ArrayList<Genre> genreList = adminGenre.readGenreAll();
+
+        request.setAttribute("genreList", genreList);
+
+        RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
+        rd.forward(request, response);
     }
 
     /**
@@ -115,6 +67,71 @@ public class Cdmenuservlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
+
+        Genre genre = new Genre();
+        AdminGenre adminGenre = new AdminGenre();
+
+        /* Insert Genre */
+        String name = request.getParameter("name");
+        String insert = request.getParameter("insert");
+
+        if (insert != null) {
+            if (!name.isEmpty()) {
+                genre.setName(name);
+
+                try {
+                    adminGenre.insertGenre(genre.getName());
+                    System.out.println(name + " inserted.");
+                } catch (Error e) {
+                    System.out.println("Error" + e.getMessage());
+                }
+
+                request.setAttribute("msg", name + " inserted.");
+            }
+        }
+
+        /* Edit Genre */
+        String edit_genrename = request.getParameter("edit_genrename");
+        String edit_genreId = request.getParameter("edit_genreId");
+        String edit = request.getParameter("edit");
+
+        if (edit != null) {
+            if (!edit_genrename.isEmpty()) {
+
+                try {
+                    adminGenre.updateGenre(edit_genrename, Integer.parseInt(edit_genreId));
+                    System.out.println(name + " inserted.");
+                } catch (Error e) {
+                    System.out.println("Error" + e.getMessage());
+                }
+
+                request.setAttribute("msg", name + " inserted.");
+            }
+        }
+
+        /* Delete Genre */
+        String delete_genreId = request.getParameter("delete_genreId");
+        String delete = request.getParameter("delete");
+
+        if (delete != null) {
+            if (!delete_genreId.isEmpty()) {
+
+                try {
+
+                    adminGenre.deleteGenre(Integer.parseInt(delete_genreId));
+                    System.out.println(delete_genreId + " deleted.");
+                } catch (Error e) {
+                    System.out.println("Error" + e.getMessage());
+                }
+
+                request.setAttribute("msg", delete_genreId + " deleted.");
+            }
+        }
+
+        ArrayList<Genre> genreList = adminGenre.readGenreAll();
+        request.setAttribute("genreList", genreList);
+        RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
+        rd.forward(request, response);
     }
 
     /**
